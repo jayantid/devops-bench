@@ -1,0 +1,16 @@
+task_id: 13
+name: "deploy-two-tier-app"
+prompt: |
+  We need to deploy our new two-tier application to cluster {{GKE_CLUSTER_NAME}} in project {{GCP_PROJECT_ID}}.
+
+  1. Deploy the `backend` service using image `gcr.io/gke-e2e-images/hello-app:1.0`. It should be named `backend` and exposed internally on port 8080.
+  2. Deploy the `frontend` service using image `gcr.io/gke-e2e-images/hello-app:1.0`. It should be named `frontend`. It must be configured to talk to the backend. Set the environment variable `BACKEND_URL` to `http://backend:8080`.
+  3. Expose the `frontend` externally using a LoadBalancer service named `frontend-srv` on port 80.
+expected_output: |
+  critical requirements:
+  - Create deployment `backend` with image `gcr.io/gke-e2e-images/hello-app:1.0`.
+  - Create service `backend` (ClusterIP) exposing port 8080.
+  - Create deployment `frontend` with image `gcr.io/gke-e2e-images/hello-app:1.0`.
+  - Configure `frontend` deployment with env var `BACKEND_URL` set to `http://backend:8080`.
+  - Create service `frontend-srv` (LoadBalancer) exposing port 80 and targeting frontend pods.
+  - Successfully apply all resources to the cluster.
