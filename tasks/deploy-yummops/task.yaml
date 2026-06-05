@@ -1,0 +1,12 @@
+task_id: 13
+name: "deploy-yummops"
+prompt: "Deploy the YummOps application from the repository https://github.com/jayantid/yummops.git to cluster {{GKE_CLUSTER_NAME}} in project {{GCP_PROJECT_ID}}."
+expected_output: |
+  critical requirements:
+  - Clone the repository `https://github.com/jayantid/yummops.git`.
+  - Resolve the Dockerfile build context issue (either modify Dockerfile or build from correct directory).
+  - Build and push the container image to a registry in project `{{GCP_PROJECT_ID}}` (e.g., GCR or Artifact Registry).
+  - Update `k8s/deployment.yaml` to use the newly built image instead of the broken tag.
+  - Deploy the manifests: redis deployment, redis service, yummops deployment, yummops service, and ingress.
+  - Verify that the `yummops` pod is running and successfully connected to Redis (e.g., by checking logs or querying the `/healthz` endpoint to confirm `redis: true`).
+  - Verify that the application is exposed and accessible.

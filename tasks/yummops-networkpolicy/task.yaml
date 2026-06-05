@@ -1,0 +1,31 @@
+task_id: 14
+name: "yummops-networkpolicy"
+prompt: "Create a NetworkPolicy for YummOps in cluster {{GKE_CLUSTER_NAME}} in project {{GCP_PROJECT_ID}} that restricts Redis access so only the YummOps web app can connect to it."
+expected_output: |
+  critical requirements:
+  - Identify that YummOps is deployed in namespace `yummops-test`.
+  - Create a NetworkPolicy named `redis-restrict` (or similar) in namespace `yummops-test`.
+  - Configure the NetworkPolicy spec.podSelector to target the redis pods (label `app: redis`).
+  - Configure ingress rules to allow traffic only from yummops web pods (label `app: yummops`) on port 6379.
+  - Successfully apply the NetworkPolicy to the cluster.
+  
+  Expected Manifest Generated:
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: redis-allow-yummops
+    namespace: yummops-test
+  spec:
+    podSelector:
+      matchLabels:
+        app: redis
+    policyTypes:
+    - Ingress
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: yummops
+      ports:
+      - protocol: TCP
+        port: 6379
